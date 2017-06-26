@@ -8,13 +8,13 @@ class AMRequest(web.RequestHandler):
     @gen.coroutine
     def post(self, *args, **kwargs):
         app_log = logging.getLogger("tornado.application")
-        app_log.error(self.request.body)
+        body = escape.json_decode(self.request.body)
+
+        message = self.parse_am_body(body)
 
         client = httpclient.AsyncHTTPClient()
 
-        sms_text = "test"
-
-        sms_test = escape.utf8(sms_text)
+        sms_test = escape.utf8(message)
         errors = 0
         for sms_phone in settings.SMS_PHONES:
             request = self.make_sms_request(settings.SMS_URL,
@@ -40,8 +40,7 @@ class AMRequest(web.RequestHandler):
 
     @staticmethod
     def parse_am_body(am_body):
-        pass
-#        return parsed_data
+        return '\n'.join([ alert['annotations']['summary'] for alert in am_body['alerts'] ])
 
     @staticmethod
     def make_sms_request(mailru_uri, **kwargs):
