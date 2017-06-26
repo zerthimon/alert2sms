@@ -1,8 +1,8 @@
 #!/bin/bash
 set -e
 
-if [ "$1" = 'alert2sms.py' ]; then
-    exec ./alert2sms.py
+if [ "${1:0:1}" = '-' ]; then
+    set -- ./alert2sms.py "$@"
 fi
 
 exec "$@"

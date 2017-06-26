@@ -3,23 +3,20 @@ import urllib
 from tornado import gen, web, escape, httpclient
 
 from settings import settings
-from pprint import pprint
-from pdb import set_trace
 
 class AMRequest(web.RequestHandler):
     @gen.coroutine
     def post(self, *args, **kwargs):
         app_log = logging.getLogger("tornado.application")
-        pprint(self.request.body)
+        app_log.error(self.request.body)
 
         client = httpclient.AsyncHTTPClient()
 
-        sms_phones = ["+00000000000"]
         sms_text = "test"
 
         sms_test = escape.utf8(sms_text)
         errors = 0
-        for sms_phone in sms_phones:
+        for sms_phone in settings.SMS_PHONES:
             request = self.make_sms_request(settings.SMS_URL,
                                             phone=sms_phone,
                                             text=sms_text,
