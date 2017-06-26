@@ -14,7 +14,7 @@ class AMRequest(web.RequestHandler):
 
         client = httpclient.AsyncHTTPClient()
 
-        sms_test = escape.utf8(message)
+        sms_text = escape.utf8(message)
         errors = 0
         for sms_phone in settings.SMS_PHONES:
             request = self.make_sms_request(settings.SMS_URL,
